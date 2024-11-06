@@ -78,3 +78,14 @@ fn collect_data() -> TelemetryPacket {
         installation: collect_installation_sample()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_collect_data() {
+        let telemetry_packet = collect_data();
+        assert_eq!(true, telemetry_packet.update.using_maintenance_service);
+    }
+}
