@@ -1,5 +1,7 @@
 fn main() {
     println!("Hello, world!");
+    let packet = collect_data();
+    println!("version to install is {}", packet.update.version_to_install);
 }
 
 
@@ -42,6 +44,37 @@ struct TelemetryPacket {
     installation: InstallationSample
 }
 
-fn collect_data()  {
+fn collect_profile_sample() -> ProfileSample {
+    ProfileSample {
+        last_version: Some(String::from("1.2.3.4"))
+    }
+}
 
+fn collect_update_sample() -> UpdateSample {
+    UpdateSample {
+        install_status: BasicStatus::Success,
+        rollback_status: None,
+        previous_installation_version: Some(String::from("0.0.0.1")),
+        version_to_install: String::from("2.0.0.0"),
+        update_type: UpdateType::Patch,
+        seconds_since_update: Some(1234u32),
+        using_maintenance_service: true,
+        maintenance_service_version: Some(String::from("1.1.1.1"))
+    }
+}
+
+fn collect_installation_sample() -> InstallationSample {
+    InstallationSample {
+        is_shared: true,
+        launch_failed_since_last_update: false,
+        launch_succeeded_since_last_update: true
+    }
+}
+
+fn collect_data() -> TelemetryPacket {
+    TelemetryPacket {
+        profile: collect_profile_sample(),
+        update: collect_update_sample(),
+        installation: collect_installation_sample()
+    }
 }
