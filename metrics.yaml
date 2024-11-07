@@ -1,0 +1,56 @@
+---
+# Required to indicate this is a `metrics.yaml` file
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+# Category
+updater:
+  # Name
+  completion_check:
+    # Metric Parameters
+    type: object
+    description: |
+      The observable state of an update as it is applied to an installation
+    notification_emails:
+      - install-update@mozilla.com
+    bugs:
+      - https://bugzilla.mozilla.org/123456789/
+    data_reviews:
+      - http://example.com/path/to/data-review
+    expires: never
+    lifetime: ping
+    send_in_pings:
+      - updater-check
+    structure:
+      type: object
+      properties:
+        profile_last_version:
+          type: string
+        update:
+          type: object
+          properties:
+            installed_ok:
+              type: boolean
+            rolled_back_ok:
+              type: boolean
+            previous_version:
+              type: string
+            update_version:
+              type: string
+            is_patch:
+              type: boolean
+            time_since_update:
+              type: number
+            mms_version:
+              type: string
+            used_mms:
+              type: boolean
+        installation:
+          type: object
+          properties:
+            is_shared:
+              type: boolean
+            launch_succeeded:
+              type: boolean
+            launch_failed:
+              type: boolean
+...
