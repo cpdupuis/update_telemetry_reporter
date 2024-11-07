@@ -1,3 +1,7 @@
+mod metrics {
+    include!(concat!(env!("OUT_DIR"), "/glean_metrics.rs"));
+}
+
 pub enum BasicStatus {
     Success,
     Error,
@@ -69,6 +73,30 @@ pub fn collect_data() -> TelemetryPacket {
         update: collect_update_sample(),
         installation: collect_installation_sample()
     }
+}
+
+pub fn report_state() -> Option<i32> {
+    use crate::metrics::updater::{CompletionCheckObject,CompletionCheckObjectItemUpdateObject,CompletionCheckObjectItemInstallationObject};
+    let report = CompletionCheckObject {
+        profile_last_version: Some(String::from("hello there")),
+        update: Some(CompletionCheckObjectItemUpdateObject {
+            installed_ok: Some(true),
+            rolled_back_ok: None,
+            previous_version: Some(String::from("123")),
+            update_version: Some(String::from("456")),
+            is_patch: Some(true),
+            time_since_update: Some(65536),
+            mms_version: Some(String::from("11")),
+            used_mms: Some(true)
+        }),
+        installation: Some(CompletionCheckObjectItemInstallationObject {
+            is_shared: Some(true),
+            launch_failed: Some(false),
+            launch_succeeded: Some(false)
+        }),
+    };
+    metrics::updater::completion_check.set(report);
+    Some(42)
 }
 
 #[cfg(test)]
