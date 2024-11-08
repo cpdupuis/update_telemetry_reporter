@@ -8,7 +8,7 @@ fn main() {
     let mut answer = String::new();
     match num {
         None => answer.push_str("nothing"),
-        Some(val) => answer.push_str("something")
+        Some(val) => answer.push_str(&val.to_string  ())
     }
     println!("The number is {}", &answer);
 }
