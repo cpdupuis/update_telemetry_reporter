@@ -16,15 +16,10 @@ mod metrics {
 #[derive(Debug)]
 pub struct MyHttpUploader;
 
-
 impl net::PingUploader for MyHttpUploader {
     fn upload(&self, upload_request: net::PingUploadRequest) -> net::UploadResult {
-
-        let upload_url = upload_request.url;
-
-
-        let mut req = ureq::post(&upload_url);
-        for header in upload_request.headers {
+        let mut req = ureq::post(&upload_request.url);
+        for header in &upload_request.headers {
             req = req.set(&header.0, &header.1);
         }
         let res = req.send_bytes(&upload_request.body.as_slice());
