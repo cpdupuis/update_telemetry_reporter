@@ -11,4 +11,8 @@ updater-check:
     - TODO
   data_reviews:
     - TODO
+  reasons:
+    because: Just because
+    other: Another reason
+  send_if_empty: true
 ...
