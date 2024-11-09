@@ -2,6 +2,8 @@ use crate::ping_uploader::MyHttpUploader;
 use glean::{ClientInfoMetrics, ConfigurationBuilder};
 use std::path::PathBuf;
 use tempfile::Builder;
+use std::thread;
+use std::time::Duration;
 
 
 pub fn configure_glean() {
@@ -24,4 +26,9 @@ pub fn configure_glean() {
     glean::set_log_pings(true);
     assert!(glean::set_debug_view_tag("cdupuis-updater"));
     glean::initialize(cfg, client_info);
+}
+
+pub fn shutdown_glean() {
+    thread::sleep(Duration::from_millis(1000));
+    glean::shutdown();
 }

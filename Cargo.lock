@@ -1213,6 +1213,7 @@ dependencies = [
  "env_logger",
  "glean",
  "glean-build",
+ "log",
  "serde",
  "serde_json",
  "tempfile",

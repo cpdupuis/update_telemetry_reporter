@@ -4,4 +4,5 @@ fn main() {
     update_telemetry_reporter::glean_config::configure_glean();
     update_telemetry_reporter::glean_telemetry::report_state();
     update_telemetry_reporter::glean_telemetry::send_ping();
+    update_telemetry_reporter::glean_config::shutdown_glean();
 }

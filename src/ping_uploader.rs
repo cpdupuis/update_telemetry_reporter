@@ -1,4 +1,5 @@
 use glean::net;
+use log::{debug, error};
 
 #[derive(Debug)]
 pub struct MyHttpUploader;
@@ -12,11 +13,11 @@ impl net::PingUploader for MyHttpUploader {
         let res = req.send_bytes(&upload_request.body.as_slice());
         match res {
             Ok(response) => {
-                println!("SUCCESS!!!!");
+                debug!("Successfully uploaded telemetry");
                 return net::UploadResult::http_status(response.status() as i32)
             },
             Err(err) => {
-                println!("Failure... {}", err.to_string());
+                error!("Failed to upload telemetry: {}", err.to_string());
                 return net::UploadResult::http_status(400);
             }
         }

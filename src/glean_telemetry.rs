@@ -3,8 +3,6 @@ use crate::metrics::updater::{
     CompletionCheckObjectItemUpdateObject,
 };
 use crate::metrics;
-use std::thread;
-use std::time::Duration;
 
 
 pub fn report_state() {
@@ -31,6 +29,4 @@ pub fn report_state() {
 
 pub fn send_ping() {
     metrics::updater_check.submit(None);
-    thread::sleep(Duration::from_millis(1000));
-    glean::shutdown();
 }
