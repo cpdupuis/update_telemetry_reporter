@@ -8,17 +8,19 @@ use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
 use tempfile::Builder;
+use ureq::{Agent, AgentBuilder, Request};
+
 
 mod metrics {
     include!(concat!(env!("OUT_DIR"), "/glean_metrics.rs"));
 }
 
-
 /// A simple mechanism to upload pings over HTTPS.
 #[derive(Debug)]
 pub struct MyHttpUploader {
-    hello_there: String
+    hello_there: String,
 }
+
 
 impl net::PingUploader for MyHttpUploader {
     /// Uploads a ping to a server.
@@ -27,13 +29,25 @@ impl net::PingUploader for MyHttpUploader {
     ///
     /// * `upload_request` - the requested upload.
     fn upload(&self, upload_request: net::PingUploadRequest) -> net::UploadResult {
-        // haha. You thought this was an uploader
-        println!("hello_there: {}", self.hello_there);
-        println!("here is the upload url: {}", upload_request.url);
-        for h in upload_request.headers {
-            println!("header: {} : {}", h.0, h.1);
+
+        let upload_url = upload_request.url;
+
+
+        let mut req = ureq::post(&upload_url);
+        for header in upload_request.headers {
+            req = req.set(&header.0, &header.1);
         }
-        net::UploadResult::http_status(200)
+        let res = req.send_bytes(&upload_request.body.as_slice());
+        match res {
+            Ok(response) => {
+                println!("SUCCESS!!!!");
+                return net::UploadResult::http_status(response.status() as i32)
+            },
+            Err(err) => {
+                println!("Failure... {}", err.to_string());
+                return net::UploadResult::http_status(400);
+            }
+        }
     }
 }
 
