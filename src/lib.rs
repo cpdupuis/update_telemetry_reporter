@@ -3,7 +3,8 @@ use crate::metrics::updater::{
     CompletionCheckObjectItemUpdateObject,
 };
 use crate::metrics::updater_check;
-use glean::{net, ClientInfoMetrics, ConfigurationBuilder};
+use crate::ping_uploader::MyHttpUploader;
+use glean::{ClientInfoMetrics, ConfigurationBuilder};
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
@@ -13,28 +14,7 @@ mod metrics {
     include!(concat!(env!("OUT_DIR"), "/glean_metrics.rs"));
 }
 
-#[derive(Debug)]
-pub struct MyHttpUploader;
-
-impl net::PingUploader for MyHttpUploader {
-    fn upload(&self, upload_request: net::PingUploadRequest) -> net::UploadResult {
-        let mut req = ureq::post(&upload_request.url);
-        for header in &upload_request.headers {
-            req = req.set(&header.0, &header.1);
-        }
-        let res = req.send_bytes(&upload_request.body.as_slice());
-        match res {
-            Ok(response) => {
-                println!("SUCCESS!!!!");
-                return net::UploadResult::http_status(response.status() as i32)
-            },
-            Err(err) => {
-                println!("Failure... {}", err.to_string());
-                return net::UploadResult::http_status(400);
-            }
-        }
-    }
-}
+mod ping_uploader;
 
 pub fn report_state() {
     let report = CompletionCheckObject {
