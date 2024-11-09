@@ -3,8 +3,7 @@ use crate::metrics::updater::{
     CompletionCheckObjectItemUpdateObject,
 };
 use crate::metrics::updater_check;
-use glean::{net, ClientInfoMetrics, ConfigurationBuilder, ErrorType};
-use serde::{Deserialize, Serialize};
+use glean::{net, ClientInfoMetrics, ConfigurationBuilder};
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
@@ -30,6 +29,10 @@ impl net::PingUploader for MyHttpUploader {
     fn upload(&self, upload_request: net::PingUploadRequest) -> net::UploadResult {
         // haha. You thought this was an uploader
         println!("hello_there: {}", self.hello_there);
+        println!("here is the upload url: {}", upload_request.url);
+        for h in upload_request.headers {
+            println!("header: {} : {}", h.0, h.1);
+        }
         net::UploadResult::http_status(200)
     }
 }
