@@ -5,6 +5,12 @@ as a periodic task such as a cronjob, scheduled task, etc.
 
 Currently a work in progress.
 
+## Viewing uploaded telemetry
+
+Telemetry is tagged as debug in order to be visible here: https://debug-ping-preview.firebaseapp.com/
+
+Documentation on debug view tag: https://mozilla.github.io/glean/book/reference/debug/debugViewTag.html
+
 ## License
 
 [MPL 2.0](http://mozilla.org/MPL/2.0/)
