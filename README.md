@@ -32,3 +32,17 @@ On Windows 11, here is a size comparison.
 Statically linked: 3593216 bytes
 Dynamically linked: 3426304 bytes
 
+## Shrinking the binary further
+
+With these optimizations:
+
+```
+strip = true  # Automatically strip symbols from the binary.
+opt-level = "z"  # Optimize for size.
+lto = true
+```
+
+Statically-linked size gets down to 3408896 bytes
+
+Then using UPX reduces size to 1246208 bytes
+
