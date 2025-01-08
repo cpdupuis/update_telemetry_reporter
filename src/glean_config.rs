@@ -5,15 +5,14 @@
 use crate::ping_uploader::MyHttpUploader;
 use glean::{ClientInfoMetrics, ConfigurationBuilder};
 use std::path::PathBuf;
-use tempfile::Builder;
 use std::thread;
+use std::env;
 use std::time::Duration;
 
 
 pub fn configure_glean() {
-    let root = Builder::new().prefix("simple-db").tempdir().unwrap();
     let uploader = MyHttpUploader;
-    let data_path: PathBuf = root.path().to_path_buf();
+    let data_path: PathBuf = env::temp_dir();
     let cfg = ConfigurationBuilder::new(true, data_path, "org.mozilla.updater_report_sample")
         .with_server_endpoint("https://incoming.telemetry.mozilla.org")
         .with_use_core_mps(false)
