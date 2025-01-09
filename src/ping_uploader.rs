@@ -4,25 +4,24 @@
 
 use glean::net;
 use log::{debug, error};
-
+use minreq;
 #[derive(Debug)]
 pub struct MyHttpUploader;
 
 impl net::PingUploader for MyHttpUploader {
     fn upload(&self, upload_request: net::PingUploadRequest) -> net::UploadResult {
-        let mut req = ureq::post(&upload_request.url);
-        for header in &upload_request.headers {
-            req = req.set(&header.0, &header.1);
-        }
-        let res = req.send_bytes(&upload_request.body.as_slice());
+        let header_vec: Vec<(String,String)> = upload_request.headers;
+        let request = minreq::post(&upload_request.url)
+            .with_headers(header_vec)
+            .with_body(upload_request.body);
+        let res = request.send();
+
         match res {
             Ok(response) => {
-                debug!("Successfully uploaded telemetry");
-                return net::UploadResult::http_status(response.status() as i32)
+                return net::UploadResult::http_status(response.status_code);
             },
             Err(err) => {
-                error!("Failed to upload telemetry: {}", err.to_string());
-                return net::UploadResult::http_status(400);
+                panic!("Failed to upload telemetry: {}", err.to_string());
             }
         }
     }
