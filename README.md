@@ -49,3 +49,5 @@ Then using UPX reduces size to 1246208 bytes
 
 Removed dependency on tempfile New stats: raw exe is 3403776 bytes, packed with UPX to 1244672 bytes.
 
+
+Now using minreq as the HTTP client library, and native-tls: raw exe is 982016 bytes, packed with UPX to 404480 bytes.

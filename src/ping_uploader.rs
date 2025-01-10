@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 use glean::net;
-use log::{debug, error};
 use minreq;
 #[derive(Debug)]
 pub struct MyHttpUploader;
